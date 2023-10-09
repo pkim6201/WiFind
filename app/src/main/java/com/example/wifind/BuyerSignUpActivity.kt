@@ -4,10 +4,8 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,18 +14,18 @@ import com.parse.ParseUser
 import com.parse.SignUpCallback
 
 
-class SignUpActivity : AppCompatActivity() {
+class BuyerSignUpActivity : AppCompatActivity() {
     private var back: ImageView? = null
     private var signup: Button? = null
+    private var email: TextInputEditText? = null
     private var username: TextInputEditText? = null
     private var password: TextInputEditText? = null
     private var passwordagain: TextInputEditText? = null
     private var progressDialog: ProgressDialog? = null
-    lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signup)
+        setContentView(R.layout.activity_buyer_signup)
 
         progressDialog = ProgressDialog(this)
 
@@ -36,36 +34,23 @@ class SignUpActivity : AppCompatActivity() {
         username = findViewById(R.id.username)
         password = findViewById(R.id.password)
         passwordagain = findViewById(R.id.passwordagain)
-        spinner = findViewById(R.id.spinner)
-
-        // Create an ArrayAdapter using the string array and a default spinner layout.
-        val adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.user_type,
-            android.R.layout.simple_spinner_item
-        )
-        // Specify the layout to use when the list of choices appears.
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner.
-        spinner.adapter = adapter
-
+        email = findViewById(R.id.email)
 
         signup?.setOnClickListener {
-            if (password?.text.toString() == passwordagain?.text.toString() && !TextUtils.isEmpty(
-                    username?.text.toString()
-                )
-            )
+            val isEmailEmpty = TextUtils.isEmpty(email?.text.toString())
+            val isUsernameEmpty = TextUtils.isEmpty(username?.text.toString())
+            if (password?.text.toString() == passwordagain?.text.toString() && !isEmailEmpty && !isUsernameEmpty)
                 signup(
                     username = username?.text.toString(),
                     password = password?.text.toString(),
-                    userType = spinner.selectedItem.toString()
-                );
+                    email = email?.text.toString()
+                )
             else
                 Toast.makeText(
                     this,
                     "Make sure that the values you entered are correct.",
                     Toast.LENGTH_SHORT
-                ).show();
+                ).show()
         }
 
         back?.setOnClickListener {
@@ -74,14 +59,15 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    fun signup(username: String, password: String, userType: String) {
+    fun signup(username: String, password: String, email: String) {
         progressDialog?.show()
 
         val user = ParseUser()
         // Set the user's username and password, which can be obtained by a forms
         user.setUsername(username);
         user.setPassword(password);
-        user.put("userType", userType)
+        user.email = email
+        user.put("userType", "buyer")
         user.signUpInBackground(SignUpCallback()
         {
             progressDialog?.dismiss()
@@ -101,7 +87,7 @@ class SignUpActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, which ->
                 dialog.cancel()
                 // don't forget to change the line below with the names of your Activities
-                val intent = Intent(this, LogoutActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }

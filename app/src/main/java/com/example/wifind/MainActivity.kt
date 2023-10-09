@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseException
@@ -39,14 +38,14 @@ class MainActivity : AppCompatActivity() {
             )
         })
 
-        navigatesignup?.setOnClickListener(View.OnClickListener {
+        navigatesignup?.setOnClickListener {
             startActivity(
                 Intent(
                     this@MainActivity,
-                    SignUpActivity::class.java
+                    SignUpChoose::class.java
                 )
             )
-        })
+        }
     }
 
     fun login(username: String, password: String) {
@@ -54,29 +53,16 @@ class MainActivity : AppCompatActivity() {
         ParseUser.logInInBackground(username,password) { parseUser: ParseUser?, parseException: ParseException? ->
             progressDialog?.dismiss()
             if (parseUser != null) {
-                showAlert("Successful Login", "Welcome back " + username + " !")
+                val intent = Intent(this, MarketBoardActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             } else {
                 ParseUser.logOut()
-                if (parseException != null) {
+                if (parseException != null)
+                {
                     Toast.makeText(this, parseException.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
-    }
-
-
-    private fun showAlert(title: String, message: String) {
-        val builder = AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, which ->
-                dialog.cancel()
-                // don't forget to change the line below with the names of your Activities
-                val intent = Intent(this, LogoutActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }
-        val ok = builder.create()
-        ok.show()
     }
 }
