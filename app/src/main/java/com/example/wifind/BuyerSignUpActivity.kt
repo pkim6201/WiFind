@@ -11,8 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseUser
-import com.parse.SignUpCallback
-
 
 class BuyerSignUpActivity : AppCompatActivity() {
     private var back: ImageView? = null
@@ -39,7 +37,9 @@ class BuyerSignUpActivity : AppCompatActivity() {
         signup?.setOnClickListener {
             val isEmailEmpty = TextUtils.isEmpty(email?.text.toString())
             val isUsernameEmpty = TextUtils.isEmpty(username?.text.toString())
-            if (password?.text.toString() == passwordagain?.text.toString() && !isEmailEmpty && !isUsernameEmpty)
+            val passwordMatchesConfirmation = password?.text.toString() == passwordagain?.text.toString()
+
+            if (passwordMatchesConfirmation && !isEmailEmpty && !isUsernameEmpty)
                 signup(
                     username = username?.text.toString(),
                     password = password?.text.toString(),
@@ -63,30 +63,27 @@ class BuyerSignUpActivity : AppCompatActivity() {
         progressDialog?.show()
 
         val user = ParseUser()
-        // Set the user's username and password, which can be obtained by a forms
-        user.setUsername(username);
-        user.setPassword(password);
+        user.username = username
+        user.setPassword(password)
         user.email = email
         user.put("userType", "buyer")
-        user.signUpInBackground(SignUpCallback()
-        {
+        user.signUpInBackground {
             progressDialog?.dismiss()
             if (it == null) {
-                showAlert("Successful Sign Up!", "Welcome " + username + " !");
+                showAlert("Successful Sign Up!", "Welcome $username !");
             } else {
                 ParseUser.logOut();
                 Toast.makeText(this, it.message, Toast.LENGTH_LONG).show();
             }
-        });
+        }
     }
 
     private fun showAlert(title: String, message: String) {
         val builder = AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("OK") { dialog, which ->
+            .setPositiveButton("OK") { dialog, _ ->
                 dialog.cancel()
-                // don't forget to change the line below with the names of your Activities
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)

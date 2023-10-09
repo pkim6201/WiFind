@@ -31,12 +31,12 @@ class MainActivity : AppCompatActivity() {
         login = findViewById(R.id.login)
         navigatesignup = findViewById(R.id.navigatesignup)
 
-        login?.setOnClickListener(View.OnClickListener {
+        login?.setOnClickListener {
             login(
                 username?.text.toString(),
                 password?.text.toString()
             )
-        })
+        }
 
         navigatesignup?.setOnClickListener {
             startActivity(
@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity() {
 
     fun login(username: String, password: String) {
         progressDialog?.show()
-        ParseUser.logInInBackground(username,password) { parseUser: ParseUser?, parseException: ParseException? ->
+        ParseUser.logInInBackground(
+            username,
+            password
+        ) { parseUser: ParseUser?, parseException: ParseException? ->
             progressDialog?.dismiss()
             if (parseUser != null) {
                 val intent = Intent(this, MarketBoardActivity::class.java)
@@ -58,8 +61,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 ParseUser.logOut()
-                if (parseException != null)
-                {
+                if (parseException != null) {
                     Toast.makeText(this, parseException.message, Toast.LENGTH_LONG).show()
                 }
             }

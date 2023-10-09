@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SignUpChoose : AppCompatActivity() {
 
-    lateinit var sellerButton: Button
-    lateinit var buyerButton: Button
+    private lateinit var sellerButton: Button
+    private lateinit var buyerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class SignUpChoose : AppCompatActivity() {
 
     }
 
-    fun navigateToBuyerSignUp() {
+    private fun navigateToBuyerSignUp() {
         startActivity(Intent(this, BuyerSignUpActivity::class.java))
     }
 }
