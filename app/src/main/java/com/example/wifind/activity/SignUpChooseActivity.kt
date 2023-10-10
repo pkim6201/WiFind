@@ -1,9 +1,10 @@
-package com.example.wifind
+package com.example.wifind.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.wifind.R
 
 class SignUpChooseActivity : AppCompatActivity() {
 

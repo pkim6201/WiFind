@@ -1,4 +1,4 @@
-package com.example.wifind
+package com.example.wifind.activity
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.wifind.R
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseException
 import com.parse.ParseUser
