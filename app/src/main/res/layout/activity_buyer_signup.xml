@@ -21,8 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/emaillayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintTop_toBottomOf="@+id/back">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
@@ -48,8 +47,7 @@
         app:layout_constraintBottom_toTopOf="@+id/etPasswordLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernamelayout"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintTop_toBottomOf="@+id/usernamelayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
@@ -74,7 +72,6 @@
         app:layout_constraintEnd_toEndOf="@+id/usernamelayout"
         app:layout_constraintStart_toStartOf="@+id/usernamelayout"
         app:layout_constraintTop_toBottomOf="@+id/emaillayout"
-        app:layout_constraintVertical_bias="0.5"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +115,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="1"
         android:padding="10dp"
         android:src="@drawable/ic_baseline_arrow_back_24"
         android:textSize="12sp"
@@ -129,17 +125,25 @@
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="32dp"
-        android:layout_weight="1"
+        android:layout_marginTop="80dp"
         android:background="@drawable/button_bg"
         android:text="SIGN UP"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/passwordagainlayout"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/passwordagainlayout"
         app:layout_constraintTop_toBottomOf="@+id/passwordagainlayout" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buyer Sign Up"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/usernamelayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
