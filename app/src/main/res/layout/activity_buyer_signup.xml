@@ -68,7 +68,7 @@
         android:hint="Password"
         android:textColorHint="@android:color/darker_gray"
         app:boxStrokeColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/passwordagainlayout"
+        app:layout_constraintBottom_toTopOf="@+id/passwordConfirmationLayout"
         app:layout_constraintEnd_toEndOf="@+id/usernamelayout"
         app:layout_constraintStart_toStartOf="@+id/usernamelayout"
         app:layout_constraintTop_toBottomOf="@+id/emaillayout"
@@ -85,13 +85,13 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordagainlayout"
+        android:id="@+id/passwordConfirmationLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:baselineAligned="false"
-        android:hint="Password again"
+        android:hint="Password Confirmation"
         android:textColorHint="@android:color/darker_gray"
         app:boxStrokeColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/signup"
@@ -102,7 +102,7 @@
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordagain"
+            android:id="@+id/passwordConfirmation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword"
@@ -130,9 +130,9 @@
         android:text="SIGN UP"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/passwordagainlayout"
-        app:layout_constraintStart_toStartOf="@+id/passwordagainlayout"
-        app:layout_constraintTop_toBottomOf="@+id/passwordagainlayout" />
+        app:layout_constraintEnd_toEndOf="@+id/passwordConfirmationLayout"
+        app:layout_constraintStart_toStartOf="@+id/passwordConfirmationLayout"
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmationLayout" />
 
     <TextView
         android:id="@+id/textView3"

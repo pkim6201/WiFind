@@ -19,7 +19,7 @@ class BuyerSignUpActivity : AppCompatActivity() {
     private var email: TextInputEditText? = null
     private var username: TextInputEditText? = null
     private var password: TextInputEditText? = null
-    private var passwordagain: TextInputEditText? = null
+    private var passwordConfirmation: TextInputEditText? = null
     private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +32,13 @@ class BuyerSignUpActivity : AppCompatActivity() {
         signup = findViewById(R.id.signup)
         username = findViewById(R.id.username)
         password = findViewById(R.id.password)
-        passwordagain = findViewById(R.id.passwordagain)
+        passwordConfirmation = findViewById(R.id.passwordConfirmation)
         email = findViewById(R.id.email)
 
         signup?.setOnClickListener {
             val isEmailEmpty = TextUtils.isEmpty(email?.text.toString())
             val isUsernameEmpty = TextUtils.isEmpty(username?.text.toString())
-            val passwordMatchesConfirmation = password?.text.toString() == passwordagain?.text.toString()
+            val passwordMatchesConfirmation = password?.text.toString() == passwordConfirmation?.text.toString()
 
             if (passwordMatchesConfirmation && !isEmailEmpty && !isUsernameEmpty)
                 signup(
@@ -71,10 +71,10 @@ class BuyerSignUpActivity : AppCompatActivity() {
         user.signUpInBackground {
             progressDialog?.dismiss()
             if (it == null) {
-                showAlert("Successful Sign Up!", "Welcome $username !");
+                showAlert("Successful Sign Up!", "Welcome $username !")
             } else {
-                ParseUser.logOut();
-                Toast.makeText(this, it.message, Toast.LENGTH_LONG).show();
+                ParseUser.logOut()
+                Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
             }
         }
     }
