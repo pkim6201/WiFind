@@ -11,6 +11,5 @@ import com.parse.ktx.delegates.stringAttribute
 class Review : ParseObject() {
     var userRating by intAttribute()
     var userReview by stringAttribute()
-    var wifi by attribute<Wifi>()
-    var user by attribute<ParseUser>()
+    var seller by attribute<ParseUser>()
 }

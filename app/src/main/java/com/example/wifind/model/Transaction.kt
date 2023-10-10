@@ -7,6 +7,6 @@ import com.parse.ktx.delegates.attribute
 
 @ParseClassName("Transaction")
 class Transaction : ParseObject() {
-    var user by attribute<ParseUser>()
-    var wifi by attribute<Wifi>()
+    var buyer by attribute<ParseUser>()
+    var purchasedWifi by attribute<Wifi>()
 }
