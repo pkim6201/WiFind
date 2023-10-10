@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-class SignUpChoose : AppCompatActivity() {
+class SignUpChooseActivity : AppCompatActivity() {
 
     private lateinit var sellerButton: Button
     private lateinit var buyerButton: Button

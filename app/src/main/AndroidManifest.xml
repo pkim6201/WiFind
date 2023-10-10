@@ -20,7 +20,7 @@
             android:name=".MarketBoardActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpChoose"
+            android:name=".SignUpChooseActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
