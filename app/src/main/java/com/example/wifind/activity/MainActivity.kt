@@ -2,10 +2,12 @@ package com.example.wifind.activity
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.wifind.R
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseException
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         login = findViewById(R.id.login)
         navigatesignup = findViewById(R.id.navigatesignup)
+
+        maybeRequestLocationPermission()
 
         login?.setOnClickListener {
             login(
@@ -65,6 +69,22 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, parseException.message, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    private fun maybeRequestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this, android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 89
+            )
         }
     }
 }
