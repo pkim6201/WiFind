@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.BuyerSignUpActivity" />
+        <activity android:name=".activity.SignUpActivity" />
 
         <meta-data
             android:name="com.parse.SERVER_URL"

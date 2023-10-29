@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BuyerSignUpActivity">
+    tools:context=".activity.SignUpActivity">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/usernamelayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:entries="@array/user_type"
+        />
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernamelayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -138,11 +147,11 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buyer Sign Up"
+        android:text="Sign Up"
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/usernamelayout"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ import com.example.wifind.R
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseUser
 
-class BuyerSignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     private var back: ImageView? = null
     private var signup: Button? = null
     private var email: TextInputEditText? = null
@@ -21,10 +22,11 @@ class BuyerSignUpActivity : AppCompatActivity() {
     private var password: TextInputEditText? = null
     private var passwordConfirmation: TextInputEditText? = null
     private var progressDialog: ProgressDialog? = null
+    private lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_buyer_signup)
+        setContentView(R.layout.activity_signup)
 
         progressDialog = ProgressDialog(this)
 
@@ -34,6 +36,7 @@ class BuyerSignUpActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         passwordConfirmation = findViewById(R.id.passwordConfirmation)
         email = findViewById(R.id.email)
+        spinner = findViewById(R.id.spinner)
 
         signup?.setOnClickListener {
             val isEmailEmpty = TextUtils.isEmpty(email?.text.toString())
@@ -44,7 +47,8 @@ class BuyerSignUpActivity : AppCompatActivity() {
                 signup(
                     username = username?.text.toString(),
                     password = password?.text.toString(),
-                    email = email?.text.toString()
+                    email = email?.text.toString(),
+                    userType = spinner.selectedItem.toString()
                 )
             else
                 Toast.makeText(
@@ -60,14 +64,19 @@ class BuyerSignUpActivity : AppCompatActivity() {
 
     }
 
-    fun signup(username: String, password: String, email: String) {
+    fun signup(
+        username: String,
+        password: String,
+        email: String,
+        userType: String
+    ) {
         progressDialog?.show()
 
         val user = ParseUser()
         user.username = username
         user.setPassword(password)
         user.email = email
-        user.put("userType", "buyer")
+        user.put("userType", userType)
         user.signUpInBackground {
             progressDialog?.dismiss()
             if (it == null) {
