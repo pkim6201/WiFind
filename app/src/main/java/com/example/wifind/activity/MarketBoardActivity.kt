@@ -10,13 +10,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wifind.R
 import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.parse.ParseQuery
+import com.parse.ParseUser
 
 
 class MarketBoardActivity : AppCompatActivity() {
@@ -24,6 +27,7 @@ class MarketBoardActivity : AppCompatActivity() {
     private val TAG = "MYTAG"
 
     private lateinit var wifiRecyclerView: RecyclerView
+    private lateinit var addWifiFab: FloatingActionButton
     private val wifiCards = mutableListOf<WifiCard>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +35,26 @@ class MarketBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_market_board)
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
+        addWifiFab = findViewById(R.id.fab)
+        maybeShowAddWifiFab()
+
+        addWifiFab.setOnClickListener {
+            // TODO
+        }
+
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         wifiRecyclerView.adapter = WifiCardAdapter(wifiCards = wifiCards)
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
+
         populateRecyclerView(locationManager)
+    }
+
+    private fun maybeShowAddWifiFab() {
+        val userType = ParseUser.getCurrentUser().getString("userType")
+        if (userType == "Seller") {
+            addWifiFab.isVisible = true
+        }
     }
 
     private fun populateRecyclerView(locationManager: LocationManager) {
