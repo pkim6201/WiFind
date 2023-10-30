@@ -1,5 +1,6 @@
 package com.example.wifind
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class WifiCardAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiCardAdapter.ViewHolder {
+        Log.d("MYTAG", "onCreateViewHolder() $wifiCards")
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         val wifiView = inflater.inflate(R.layout.layout_wifi_item, parent, false)

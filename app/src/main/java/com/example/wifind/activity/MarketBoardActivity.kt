@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,31 +17,45 @@ import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
 import com.parse.ParseQuery
+import com.parse.ktx.findAll
 
 
 class MarketBoardActivity : AppCompatActivity() {
 
+    private val TAG = "MYTAG"
+
     private lateinit var wifiRecyclerView: RecyclerView
-    private lateinit var locationManager: LocationManager
+    private val wifiCards = mutableListOf<WifiCard>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_market_board)
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        wifiRecyclerView.adapter = WifiCardAdapter(wifiCards = wifiCards)
+        wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        populateRecyclerView(locationManager)
+    }
+
+    private fun populateRecyclerView(locationManager: LocationManager) {
+        Log.d(TAG, "MYTAG populateRecyclerView()")
         val wifis = getAllWifis()
+        getCurrentLocation(locationManager) { location ->
+            runOnUiThread {
 
-        getCurrentLocation { location ->
-            wifiRecyclerView.adapter = WifiCardAdapter(
-                wifiCards = wifis.map { it.toWifiCard(location) }
-            )
-            wifiRecyclerView.layoutManager = LinearLayoutManager(this)
+                wifiCards.addAll(
+                    wifis.map { it.toWifiCard(location) }
+                )
+                wifiRecyclerView.adapter?.notifyDataSetChanged()
+                wifiRecyclerView.scrollToPosition(0)
+            }
         }
     }
 
     fun getAllWifis(): List<Wifi> {
+        Log.d( TAG, "MYTAG getAllWifis()")
         return ParseQuery.getQuery<Wifi>("Wifi").find()
     }
 
@@ -57,8 +72,10 @@ class MarketBoardActivity : AppCompatActivity() {
     }
 
     @SuppressLint("MissingPermission") // already doing check
-    private fun getCurrentLocation(block: (Location) -> Unit) {
+    private fun getCurrentLocation(locationManager: LocationManager, block: (Location) -> Unit) {
+        Log.d( TAG,"MYTAG getCurrentLocation()")
         if (isLocationPermissionGranted()) {
+            Log.d(TAG,"MYTAG getCurrentLocation() permission is granted")
             locationManager.getCurrentLocation(
                 /* provider = */ LocationManager.NETWORK_PROVIDER,
                 /* cancellationSignal = */ null,
