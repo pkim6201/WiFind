@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wifind.model.Wifi
+import com.example.wifind.model.WifiCard
 
 class WifiCardAdapter(
-    private val wifis: List<Wifi>
+    private val wifiCards: List<WifiCard>
 ) : RecyclerView.Adapter<WifiCardAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,14 +26,14 @@ class WifiCardAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: WifiCardAdapter.ViewHolder, position: Int) {
-        val wifi = wifis[position]
+        val wifiCard = wifiCards[position]
         viewHolder.apply {
-            nameTextView.text = wifi.wifiName
-            distanceTextView.text = "" // TODO
-            speedTextView.text = "Speed: " + wifi.wifiSpeed.toString()
-            priceTextView.text = "Price: $" + wifi.price.toString()
+            nameTextView.text = wifiCard.wifi.wifiName
+            distanceTextView.text = "Distance: " + wifiCard.distanceToWifi.toString() + " meters"
+            speedTextView.text = "Wifi Speed: " + wifiCard.wifi.wifiSpeed.toString()
+            priceTextView.text = "Price: $" + wifiCard.wifi.price.toString()
         }
     }
 
-    override fun getItemCount(): Int = wifis.size
+    override fun getItemCount(): Int = wifiCards.size
 }
