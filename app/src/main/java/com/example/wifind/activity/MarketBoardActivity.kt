@@ -126,7 +126,7 @@ class MarketBoardActivity : AppCompatActivity() {
         }
         return WifiCard(
             wifi = this,
-            distanceToWifi = currentLocation.distanceTo(wifiLocation).toDouble()
+            distanceToWifi = currentLocation.distanceTo(wifiLocation).toInt()
         )
     }
 
