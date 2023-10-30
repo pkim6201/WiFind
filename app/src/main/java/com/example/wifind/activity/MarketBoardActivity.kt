@@ -17,7 +17,6 @@ import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
 import com.parse.ParseQuery
-import com.parse.ktx.findAll
 
 
 class MarketBoardActivity : AppCompatActivity() {
@@ -44,9 +43,10 @@ class MarketBoardActivity : AppCompatActivity() {
         val wifis = getAllWifis()
         getCurrentLocation(locationManager) { location ->
             runOnUiThread {
-
                 wifiCards.addAll(
-                    wifis.map { it.toWifiCard(location) }
+                    wifis
+                        .map { it.toWifiCard(location) }
+                        .sortedByDescending(WifiCard::distanceToWifi)
                 )
                 wifiRecyclerView.adapter?.notifyDataSetChanged()
                 wifiRecyclerView.scrollToPosition(0)
@@ -55,7 +55,7 @@ class MarketBoardActivity : AppCompatActivity() {
     }
 
     fun getAllWifis(): List<Wifi> {
-        Log.d( TAG, "MYTAG getAllWifis()")
+        Log.d(TAG, "MYTAG getAllWifis()")
         return ParseQuery.getQuery<Wifi>("Wifi").find()
     }
 
@@ -73,9 +73,9 @@ class MarketBoardActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission") // already doing check
     private fun getCurrentLocation(locationManager: LocationManager, block: (Location) -> Unit) {
-        Log.d( TAG,"MYTAG getCurrentLocation()")
+        Log.d(TAG, "MYTAG getCurrentLocation()")
         if (isLocationPermissionGranted()) {
-            Log.d(TAG,"MYTAG getCurrentLocation() permission is granted")
+            Log.d(TAG, "MYTAG getCurrentLocation() permission is granted")
             locationManager.getCurrentLocation(
                 /* provider = */ LocationManager.NETWORK_PROVIDER,
                 /* cancellationSignal = */ null,
