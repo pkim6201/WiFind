@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -48,12 +47,14 @@ class MarketBoardActivity : AppCompatActivity() {
             showAddWifiDialog()
         }
 
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         wifiRecyclerView.adapter = WifiCardAdapter(wifiCards = wifiCards)
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        refreshRecyclerView()
+    }
 
-        populateRecyclerView(locationManager)
+    fun getLocationManager(): LocationManager {
+        return getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     private fun showAddWifiDialog() {
@@ -82,6 +83,7 @@ class MarketBoardActivity : AppCompatActivity() {
                     location = ParseGeoPoint(lat, lon)
                     seller = ParseUser.getCurrentUser()
                 }.save()
+                refreshRecyclerView()
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
@@ -94,18 +96,19 @@ class MarketBoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateRecyclerView(locationManager: LocationManager) {
-        Log.d(TAG, "MYTAG populateRecyclerView()")
+    private fun refreshRecyclerView() {
+        Log.d(TAG, "MYTAG refreshRecyclerView()")
         val wifis = getAllWifis()
-        getCurrentLocation(locationManager) { location ->
+        getCurrentLocation(getLocationManager()) { location ->
             runOnUiThread {
+                wifiCards.clear()
                 wifiCards.addAll(
                     wifis
                         .map { it.toWifiCard(location) }
                         .sortedByDescending(WifiCard::distanceToWifi)
                 )
                 wifiRecyclerView.adapter?.notifyDataSetChanged()
-                wifiRecyclerView.scrollToPosition(0)
+                wifiRecyclerView.smoothScrollToPosition(0)
             }
         }
     }
