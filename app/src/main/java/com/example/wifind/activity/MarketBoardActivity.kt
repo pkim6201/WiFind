@@ -7,17 +7,23 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wifind.R
+import com.example.wifind.RangeInputFilter
 import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.parse.ParseGeoPoint
 import com.parse.ParseQuery
 import com.parse.ParseUser
 
@@ -39,7 +45,7 @@ class MarketBoardActivity : AppCompatActivity() {
         maybeShowAddWifiFab()
 
         addWifiFab.setOnClickListener {
-            // TODO
+            showAddWifiDialog()
         }
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -48,6 +54,37 @@ class MarketBoardActivity : AppCompatActivity() {
 
 
         populateRecyclerView(locationManager)
+    }
+
+    private fun showAddWifiDialog() {
+        val view = LayoutInflater.from(this).inflate(R.layout.layout_wifi_add_edit, null)
+        val latEditText = view.findViewById<EditText>(R.id.et_lat)
+        val lonEditText = view.findViewById<EditText>(R.id.et_lon)
+        latEditText.filters = arrayOf(RangeInputFilter(-90.0, 90.0))
+        lonEditText.filters = arrayOf(RangeInputFilter(-180.0, 180.0))
+
+        MaterialAlertDialogBuilder(this)
+            .setView(view)
+            .setTitle("Add Wifi")
+            .setPositiveButton("Confirm") { _, _ ->
+                val wifiName = view.findViewById<EditText>(R.id.et_name).text.toString()
+                val wifiPassword = view.findViewById<EditText>(R.id.et_password).text.toString()
+                val lat = latEditText.text.toString().toDouble()
+                val lon = lonEditText.text.toString().toDouble()
+                val price = view.findViewById<EditText>(R.id.et_price).text.toString().toDouble()
+                val speed = view.findViewById<EditText>(R.id.et_speed).text.toString().toInt()
+
+                Wifi().apply {
+                    this.wifiName = wifiName
+                    this.wifiPassword = wifiPassword
+                    this.price = price
+                    wifiSpeed = speed
+                    location = ParseGeoPoint(lat, lon)
+                    seller = ParseUser.getCurrentUser()
+                }.save()
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
     }
 
     private fun maybeShowAddWifiFab() {
