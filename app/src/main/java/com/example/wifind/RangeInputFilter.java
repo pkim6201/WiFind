@@ -17,6 +17,7 @@ public class RangeInputFilter implements InputFilter {
             String sourceStr = source.toString();
             String destStr = dest.toString();
             String result = destStr.substring(0, dStart) + sourceStr.substring(start, end) + destStr.substring(dEnd);
+            if (result.equals("-")) return null;
             double input = Double.parseDouble(result);
             if (min <= input && input <= max) return null;
         } catch (NumberFormatException ignored) { }
