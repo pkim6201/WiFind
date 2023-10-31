@@ -3,6 +3,7 @@ package com.example.wifind.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -20,8 +21,10 @@ import com.example.wifind.RangeInputFilter
 import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationBarView
 import com.parse.ParseGeoPoint
 import com.parse.ParseQuery
 import com.parse.ParseUser
@@ -34,6 +37,7 @@ class MarketBoardActivity : AppCompatActivity() {
     private lateinit var wifiRecyclerView: RecyclerView
     private lateinit var addWifiFab: FloatingActionButton
     private val wifiCards = mutableListOf<WifiCard>()
+    lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,20 @@ class MarketBoardActivity : AppCompatActivity() {
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
         addWifiFab = findViewById(R.id.fab)
+        bottomNav = findViewById(R.id.bottom_nav)
         maybeShowAddWifiFab()
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.marketplace -> true
+                R.id.account -> {
+                    startActivity(Intent(this, AccountActivity::class.java))
+                    true
+                }
+
+                else -> false
+            }
+        }
 
         addWifiFab.setOnClickListener {
             showAddWifiDialog()

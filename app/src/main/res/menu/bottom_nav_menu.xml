@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_1"
+        android:id="@+id/marketplace"
         android:enabled="true"
         android:icon="@drawable/ic_store"
         android:title="Marketplace" />
     <item
-        android:id="@+id/item_2"
+        android:id="@+id/account"
         android:enabled="true"
         android:icon="@drawable/ic_account_circle"
         android:title="Account" />
