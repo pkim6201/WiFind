@@ -24,7 +24,6 @@ import com.example.wifind.model.WifiCard
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationBarView
 import com.parse.ParseGeoPoint
 import com.parse.ParseQuery
 import com.parse.ParseUser
@@ -48,11 +47,13 @@ class MarketBoardActivity : AppCompatActivity() {
         bottomNav = findViewById(R.id.bottom_nav)
         maybeShowAddWifiFab()
 
+        bottomNav.selectedItemId = R.id.marketplace
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.marketplace -> true
                 R.id.account -> {
                     startActivity(Intent(this, AccountActivity::class.java))
+                    overridePendingTransition(0, 0)
                     true
                 }
 
@@ -68,6 +69,11 @@ class MarketBoardActivity : AppCompatActivity() {
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNav.selectedItemId = R.id.marketplace
     }
 
     fun getLocationManager(): LocationManager {
