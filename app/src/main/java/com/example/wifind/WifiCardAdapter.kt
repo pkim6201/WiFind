@@ -11,8 +11,14 @@ import com.example.wifind.model.WifiCard
 import com.parse.ParseUser
 
 class WifiCardAdapter(
-    private val wifiCards: List<WifiCard>
+    private val wifiCards: List<WifiCard>,
+    private val onItemClickListener: OnItemClickListener,
 ) : RecyclerView.Adapter<WifiCardAdapter.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onEditClicked(wifiCard: WifiCard, position: Int)
+        fun onDeleteClicked(wifiCard: WifiCard, position: Int)
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView = itemView.findViewById<TextView>(R.id.tvName)
@@ -33,14 +39,21 @@ class WifiCardAdapter(
 
     override fun onBindViewHolder(viewHolder: WifiCardAdapter.ViewHolder, position: Int) {
         val wifiCard = wifiCards[position]
-        val iconVisibility = if (wifiCard.wifi.seller.hasSameId(ParseUser.getCurrentUser())) View.VISIBLE else View.GONE
+        val iconVisibility =
+            if (wifiCard.wifi.seller.hasSameId(ParseUser.getCurrentUser())) View.VISIBLE else View.GONE
         viewHolder.apply {
             nameTextView.text = wifiCard.wifi.wifiName
             distanceTextView.text = "Distance: " + wifiCard.distanceToWifi.toString() + " meters"
             speedTextView.text = "Wifi Speed: " + wifiCard.wifi.wifiSpeed.toString()
             priceTextView.text = "Price: $" + wifiCard.wifi.price.toString()
-            editButton.visibility = iconVisibility
-            deleteButton.visibility = iconVisibility
+            editButton.apply {
+                visibility = iconVisibility
+                setOnClickListener { onItemClickListener.onEditClicked(wifiCard, position) }
+            }
+            deleteButton.apply {
+                visibility = iconVisibility
+                setOnClickListener { onItemClickListener.onDeleteClicked(wifiCard, position) }
+            }
         }
     }
 

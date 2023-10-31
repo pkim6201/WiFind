@@ -65,7 +65,19 @@ class MarketBoardActivity : AppCompatActivity() {
             showAddWifiDialog()
         }
 
-        wifiRecyclerView.adapter = WifiCardAdapter(wifiCards = wifiCards)
+        wifiRecyclerView.adapter = WifiCardAdapter(
+            wifiCards = wifiCards,
+            object : WifiCardAdapter.OnItemClickListener {
+                override fun onEditClicked(wifiCard: WifiCard, position: Int) {
+                    onWifiCardEditClicked(wifiCard.wifi, position)
+                }
+
+                override fun onDeleteClicked(wifiCard: WifiCard, position: Int) {
+                    onWifiCardDeleteClicked(wifiCard, position)
+                }
+
+            }
+        )
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
@@ -76,37 +88,77 @@ class MarketBoardActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.marketplace
     }
 
+    fun onWifiCardEditClicked(wifi: Wifi, position: Int) {
+        showAddEditWifiDialog(
+            title = "Edit Wifi",
+            wifi = wifi,
+            onConfirmClicked = { wifi ->
+                wifi.save()
+                refreshRecyclerView()
+            }
+        )
+        wifiRecyclerView.adapter?.notifyItemChanged(position)
+    }
+
+    fun onWifiCardDeleteClicked(wifiCard: WifiCard, position: Int) {
+        wifiCard.wifi.delete()
+        wifiCards.remove(wifiCard)
+        wifiRecyclerView.adapter?.notifyItemRemoved(position)
+    }
+
     fun getLocationManager(): LocationManager {
         return getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     private fun showAddWifiDialog() {
+        showAddEditWifiDialog(
+            title = "Add Wifi",
+            onConfirmClicked = { wifi ->
+                wifi.save()
+                refreshRecyclerView()
+            }
+        )
+    }
+
+    private fun showAddEditWifiDialog(
+        title: String,
+        wifi: Wifi = Wifi(),
+        onConfirmClicked: (wifi: Wifi) -> Unit,
+    ) {
         val view = LayoutInflater.from(this).inflate(R.layout.layout_wifi_add_edit, null)
-        val latEditText = view.findViewById<EditText>(R.id.et_lat)
-        val lonEditText = view.findViewById<EditText>(R.id.et_lon)
-        latEditText.filters = arrayOf(RangeInputFilter(-90.0, 90.0))
-        lonEditText.filters = arrayOf(RangeInputFilter(-180.0, 180.0))
+        val etLat = view.findViewById<EditText>(R.id.et_lat)
+        val etLon = view.findViewById<EditText>(R.id.et_lon)
+        val etName = view.findViewById<EditText>(R.id.et_name)
+        val etPassword = view.findViewById<EditText>(R.id.et_password)
+        val etPrice = view.findViewById<EditText>(R.id.et_price)
+        val etSpeed = view.findViewById<EditText>(R.id.et_speed)
+
+        etLat.filters = arrayOf(RangeInputFilter(-90.0, 90.0))
+        etLon.filters = arrayOf(RangeInputFilter(-180.0, 180.0))
+        etLat.setText(wifi.location?.latitude.toString() ?: "")
+        etLon.setText(wifi.location?.longitude.toString() ?: "")
+        etName.setText(wifi.wifiName)
+        etPassword.setText(wifi.wifiPassword)
+        etPrice.setText(if (wifi.price == 0.0) "" else wifi.price.toString())
+        etSpeed.setText(if (wifi.wifiSpeed == 0) "" else wifi.wifiSpeed.toString())
 
         MaterialAlertDialogBuilder(this)
             .setView(view)
-            .setTitle("Add Wifi")
+            .setTitle(title)
             .setPositiveButton("Confirm") { _, _ ->
-                val wifiName = view.findViewById<EditText>(R.id.et_name).text.toString()
-                val wifiPassword = view.findViewById<EditText>(R.id.et_password).text.toString()
-                val lat = latEditText.text.toString().toDouble()
-                val lon = lonEditText.text.toString().toDouble()
-                val price = view.findViewById<EditText>(R.id.et_price).text.toString().toDouble()
-                val speed = view.findViewById<EditText>(R.id.et_speed).text.toString().toInt()
-
-                Wifi().apply {
-                    this.wifiName = wifiName
-                    this.wifiPassword = wifiPassword
-                    this.price = price
-                    wifiSpeed = speed
-                    location = ParseGeoPoint(lat, lon)
-                    seller = ParseUser.getCurrentUser()
-                }.save()
-                refreshRecyclerView()
+                onConfirmClicked(
+                    wifi.apply {
+                        this.wifiName = etName.text.toString()
+                        this.wifiPassword = etPassword.text.toString()
+                        this.price = etPrice.text.toString().toDouble()
+                        wifiSpeed = etSpeed.text.toString().toInt()
+                        location = ParseGeoPoint(
+                            etLat.text.toString().toDouble(),
+                            etLon.text.toString().toDouble()
+                        )
+                        seller = ParseUser.getCurrentUser()
+                    }
+                )
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
