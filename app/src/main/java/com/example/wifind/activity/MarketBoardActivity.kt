@@ -11,8 +11,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -95,9 +97,9 @@ class MarketBoardActivity : AppCompatActivity() {
             onConfirmClicked = { wifi ->
                 wifi.save()
                 refreshRecyclerView()
+                wifiRecyclerView.adapter?.notifyItemChanged(position)
             }
         )
-        wifiRecyclerView.adapter?.notifyItemChanged(position)
     }
 
     fun onWifiCardDeleteClicked(wifiCard: WifiCard, position: Int) {
@@ -146,19 +148,23 @@ class MarketBoardActivity : AppCompatActivity() {
             .setView(view)
             .setTitle(title)
             .setPositiveButton("Confirm") { _, _ ->
-                onConfirmClicked(
-                    wifi.apply {
-                        this.wifiName = etName.text.toString()
-                        this.wifiPassword = etPassword.text.toString()
-                        this.price = etPrice.text.toString().toDouble()
-                        wifiSpeed = etSpeed.text.toString().toInt()
-                        location = ParseGeoPoint(
-                            etLat.text.toString().toDouble(),
-                            etLon.text.toString().toDouble()
-                        )
-                        seller = ParseUser.getCurrentUser()
-                    }
-                )
+                try {
+                    onConfirmClicked(
+                        wifi.apply {
+                            this.wifiName = etName.text.toString()
+                            this.wifiPassword = etPassword.text.toString()
+                            this.price = etPrice.text.toString().toDouble()
+                            wifiSpeed = etSpeed.text.toString().toInt()
+                            location = ParseGeoPoint(
+                                etLat.text.toString().toDouble(),
+                                etLon.text.toString().toDouble()
+                            )
+                            seller = ParseUser.getCurrentUser()
+                        }
+                    )
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error: '${e.message}' please try again", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
