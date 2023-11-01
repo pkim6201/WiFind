@@ -6,8 +6,8 @@
         android:icon="@drawable/ic_store"
         android:title="Marketplace" />
     <item
-        android:id="@+id/account"
+        android:id="@+id/settings"
         android:enabled="true"
-        android:icon="@drawable/ic_account_circle"
-        android:title="Account" />
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
 </menu>

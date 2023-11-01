@@ -8,14 +8,14 @@ import com.example.wifind.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.parse.ParseUser
 
-class AccountActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     lateinit var btLogOut: Button
     lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account)
+        setContentView(R.layout.activity_settings)
 
         btLogOut = findViewById(R.id.bt_logout)
         bottomNav = findViewById(R.id.bottom_nav)
@@ -35,7 +35,7 @@ class AccountActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.account -> true
+                R.id.settings -> true
 
                 else -> false
             }
@@ -44,7 +44,7 @@ class AccountActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        bottomNav.selectedItemId = R.id.account
+        bottomNav.selectedItemId = R.id.settings
     }
 
 }

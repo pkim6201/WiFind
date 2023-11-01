@@ -14,7 +14,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +52,8 @@ class MarketBoardActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.marketplace -> true
-                R.id.account -> {
-                    startActivity(Intent(this, AccountActivity::class.java))
+                R.id.settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
                     overridePendingTransition(0, 0)
                     true
                 }

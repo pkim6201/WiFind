@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Wifind"
         tools:targetApi="31">
         <activity
-            android:name=".activity.AccountActivity"
+            android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MarketBoardActivity"
