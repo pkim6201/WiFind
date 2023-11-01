@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         progressDialog = ProgressDialog(this@MainActivity)
 
         username = findViewById(R.id.username)
@@ -33,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         login = findViewById(R.id.login)
         navigatesignup = findViewById(R.id.navigatesignup)
 
+        navigateToMarketPlaceIfSignedIn()
         maybeRequestLocationPermission()
 
         login?.setOnClickListener {
@@ -52,6 +52,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun navigateToMarketPlaceIfSignedIn() {
+        if (ParseUser.getCurrentUser() != null) {
+            navigateToMarketBoard()
+        }
+    }
+
     fun login(username: String, password: String) {
         progressDialog?.show()
         ParseUser.logInInBackground(
@@ -60,9 +66,7 @@ class MainActivity : AppCompatActivity() {
         ) { parseUser: ParseUser?, parseException: ParseException? ->
             progressDialog?.dismiss()
             if (parseUser != null) {
-                val intent = Intent(this, MarketBoardActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                navigateToMarketBoard()
             } else {
                 ParseUser.logOut()
                 if (parseException != null) {
@@ -70,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun navigateToMarketBoard() {
+        val intent = Intent(this, MarketBoardActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun maybeRequestLocationPermission() {
