@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this@MainActivity,
-                    SignUpActivity::class.java
+                    SignUpChooseActivity::class.java
                 )
             )
         }

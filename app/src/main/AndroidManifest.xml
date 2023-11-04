@@ -19,13 +19,16 @@
         android:theme="@style/Theme.Wifind"
         tools:targetApi="31">
         <activity
+            android:name=".activity.SignUpChooseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SellerSignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MarketBoardActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.SignUpChooseActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
@@ -36,7 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SignUpActivity" />
+        <activity android:name=".activity.BuyerSignUpActivity" />
 
         <meta-data
             android:name="com.parse.SERVER_URL"

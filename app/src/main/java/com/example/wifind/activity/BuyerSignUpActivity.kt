@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,7 @@ import com.example.wifind.R
 import com.google.android.material.textfield.TextInputEditText
 import com.parse.ParseUser
 
-class SignUpActivity : AppCompatActivity() {
+class BuyerSignUpActivity : AppCompatActivity() {
     private var back: ImageView? = null
     private var signup: Button? = null
     private var email: TextInputEditText? = null
@@ -22,7 +21,6 @@ class SignUpActivity : AppCompatActivity() {
     private var password: TextInputEditText? = null
     private var passwordConfirmation: TextInputEditText? = null
     private var progressDialog: ProgressDialog? = null
-    private lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,19 +34,18 @@ class SignUpActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         passwordConfirmation = findViewById(R.id.passwordConfirmation)
         email = findViewById(R.id.email)
-        spinner = findViewById(R.id.spinner)
 
         signup?.setOnClickListener {
             val isEmailEmpty = TextUtils.isEmpty(email?.text.toString())
             val isUsernameEmpty = TextUtils.isEmpty(username?.text.toString())
-            val passwordMatchesConfirmation = password?.text.toString() == passwordConfirmation?.text.toString()
+            val passwordMatchesConfirmation =
+                password?.text.toString() == passwordConfirmation?.text.toString()
 
             if (passwordMatchesConfirmation && !isEmailEmpty && !isUsernameEmpty)
                 signup(
                     username = username?.text.toString(),
                     password = password?.text.toString(),
                     email = email?.text.toString(),
-                    userType = spinner.selectedItem.toString()
                 )
             else
                 Toast.makeText(
@@ -68,7 +65,6 @@ class SignUpActivity : AppCompatActivity() {
         username: String,
         password: String,
         email: String,
-        userType: String
     ) {
         progressDialog?.show()
 
@@ -76,7 +72,7 @@ class SignUpActivity : AppCompatActivity() {
         user.username = username
         user.setPassword(password)
         user.email = email
-        user.put("userType", userType)
+        user.put("userType", "Buyer")
         user.signUpInBackground {
             progressDialog?.dismiss()
             if (it == null) {

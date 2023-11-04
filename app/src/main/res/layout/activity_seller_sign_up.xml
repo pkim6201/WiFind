@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BuyerSignUpActivity">
+    tools:context=".activity.SellerSignUpActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernamelayout"
@@ -127,7 +127,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buyer Sign Up"
+        android:text="Seller Sign Up"
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
