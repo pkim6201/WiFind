@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,7 @@ class MarketBoardActivity : AppCompatActivity() {
 
     private lateinit var wifiRecyclerView: RecyclerView
     private lateinit var addWifiFab: FloatingActionButton
+    private lateinit var sortRadioGroup: RadioGroup
     private val wifiCards = mutableListOf<WifiCard>()
     lateinit var bottomNav: BottomNavigationView
 
@@ -45,9 +47,11 @@ class MarketBoardActivity : AppCompatActivity() {
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
         addWifiFab = findViewById(R.id.fab)
+        sortRadioGroup = findViewById(R.id.radio_group)
         bottomNav = findViewById(R.id.bottom_nav)
         maybeShowAddWifiFab()
 
+        sortRadioGroup.setOnCheckedChangeListener { _, checkedId -> onSortOptionSelected(checkedId) }
         bottomNav.selectedItemId = R.id.marketplace
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -82,6 +86,14 @@ class MarketBoardActivity : AppCompatActivity() {
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
+    }
+
+    private fun onSortOptionSelected(checkedId: Int) {
+        when (checkedId) {
+            R.id.rb_distance -> wifiCards.sortBy { it.distanceToWifi }
+            R.id.rb_price -> wifiCards.sortBy { it.wifi.price }
+        }
+        wifiRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onResume() {
