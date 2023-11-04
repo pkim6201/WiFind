@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.wifind'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.wifind"
@@ -44,4 +44,5 @@ dependencies {
 
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:4.2.1'
     implementation "com.github.parse-community.Parse-SDK-Android:ktx:4.2.1"
+    implementation 'com.stripe:stripe-android:20.34.3'
 }
