@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:4.2.1'
     implementation "com.github.parse-community.Parse-SDK-Android:ktx:4.2.1"
     implementation 'com.stripe:stripe-android:20.34.3'
+    implementation 'androidx.browser:browser:1.6.0'
 }

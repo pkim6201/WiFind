@@ -2,6 +2,7 @@ package com.example.wifind
 
 import android.app.Application
 import com.example.wifind.model.Review
+import com.example.wifind.model.StripeAccount
 import com.example.wifind.model.Transaction
 import com.example.wifind.model.Wifi
 import com.parse.Parse
@@ -12,9 +13,9 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        ParseObject.registerSubclass(Review::class.java)
-        ParseObject.registerSubclass(Wifi::class.java)
-        ParseObject.registerSubclass(Transaction::class.java)
+        arrayOf(Review::class, Wifi::class, Transaction::class, StripeAccount::class).forEach {
+            ParseObject.registerSubclass(it.java)
+        }
 
         Parse.initialize(
             Parse.Configuration.Builder(this)
