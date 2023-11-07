@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.wifind.R
 import com.google.android.material.textfield.TextInputEditText
+import com.parse.Parse
 import com.parse.ParseException
 import com.parse.ParseUser
 
@@ -53,7 +54,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToMarketPlaceIfSignedIn() {
-        if (ParseUser.getCurrentUser() != null) {
+        val currentUser = ParseUser.getCurrentUser()
+        if (currentUser != null && currentUser.getBoolean("emailVerified")) {
             navigateToMarketBoard()
         }
     }
