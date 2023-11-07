@@ -2,6 +2,7 @@ package com.example.wifind.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -90,7 +92,9 @@ class MarketBoardActivity : AppCompatActivity() {
                 }
 
                 override fun onBuyClicked(wifiCard: WifiCard) {
-                    TODO("Not yet implemented")
+                    val intent = Intent(this@MarketBoardActivity, CheckoutActivity::class.java)
+                    intent.putExtra("wifi", wifiCard.wifi)
+                    startActivityForResult(intent, CHECKOUT_ACTIVITY_REQUEST_CODE)
                 }
 
             }
@@ -98,6 +102,20 @@ class MarketBoardActivity : AppCompatActivity() {
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        Log.d(TAG, "onActivityResult: requestCode=$requestCode resultCode=$resultCode data=$data")
+        if (requestCode != CHECKOUT_ACTIVITY_REQUEST_CODE || resultCode != Activity.RESULT_OK) return
+
+        val wifiPassword = data?.getStringExtra("wifiPassword") ?: return
+        AlertDialog.Builder(this)
+            .setTitle("Wifi Successfully Purchased")
+            .setMessage("Wifi Password: $wifiPassword")
+            .setNegativeButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     private fun didSellerSetupStripe(): Boolean {
@@ -264,4 +282,8 @@ class MarketBoardActivity : AppCompatActivity() {
             this,
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+
+    companion object {
+        const val CHECKOUT_ACTIVITY_REQUEST_CODE = 42
+    }
 }
