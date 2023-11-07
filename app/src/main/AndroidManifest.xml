@@ -19,6 +19,19 @@
         android:theme="@style/Theme.Wifind"
         tools:targetApi="31">
         <activity
+            android:name=".activity.StripeReturnActivity"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="www.wifind.com"
+                    android:scheme="https" />
+                <data android:scheme="wifind" android:host="return" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.StripeSetupActivity"
             android:exported="false" />
         <activity
