@@ -89,6 +89,10 @@ class MarketBoardActivity : AppCompatActivity() {
                     onWifiCardDeleteClicked(wifiCard, position)
                 }
 
+                override fun onBuyClicked(wifiCard: WifiCard) {
+                    TODO("Not yet implemented")
+                }
+
             }
         )
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)

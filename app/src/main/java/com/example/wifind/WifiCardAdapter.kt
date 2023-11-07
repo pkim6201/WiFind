@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class WifiCardAdapter(
     interface OnItemClickListener {
         fun onEditClicked(wifiCard: WifiCard, position: Int)
         fun onDeleteClicked(wifiCard: WifiCard, position: Int)
+        fun onBuyClicked(wifiCard: WifiCard)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,6 +29,7 @@ class WifiCardAdapter(
         val priceTextView = itemView.findViewById<TextView>(R.id.tvPrice)
         val editButton = itemView.findViewById<ImageView>(R.id.edit_icon)
         val deleteButton = itemView.findViewById<ImageView>(R.id.delete_icon)
+        val buyButton = itemView.findViewById<Button>(R.id.bt_buy)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiCardAdapter.ViewHolder {
@@ -39,8 +42,9 @@ class WifiCardAdapter(
 
     override fun onBindViewHolder(viewHolder: WifiCardAdapter.ViewHolder, position: Int) {
         val wifiCard = wifiCards[position]
-        val iconVisibility =
-            if (wifiCard.wifi.seller.hasSameId(ParseUser.getCurrentUser())) View.VISIBLE else View.GONE
+        val didUserCreateWifiCard = wifiCard.wifi.seller.hasSameId(ParseUser.getCurrentUser())
+        val iconVisibility = if (didUserCreateWifiCard) View.VISIBLE else View.GONE
+        val buyButtonVisibility = if (didUserCreateWifiCard) View.GONE else View.VISIBLE
         viewHolder.apply {
             nameTextView.text = wifiCard.wifi.wifiName
             distanceTextView.text = "Distance: " + wifiCard.distanceToWifi.toString() + " meters"
@@ -53,6 +57,10 @@ class WifiCardAdapter(
             deleteButton.apply {
                 visibility = iconVisibility
                 setOnClickListener { onItemClickListener.onDeleteClicked(wifiCard, position) }
+            }
+            buyButton.apply {
+                visibility = buyButtonVisibility
+                setOnClickListener { onItemClickListener.onBuyClicked(wifiCard) }
             }
         }
     }
