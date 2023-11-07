@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wifind.R
 import com.example.wifind.RangeInputFilter
 import com.example.wifind.WifiCardAdapter
+import com.example.wifind.model.StripeAccount
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
+import com.example.wifind.model.userType
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -44,6 +46,12 @@ class MarketBoardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_market_board)
+
+        if (!didSellerSetupStripe()) {
+            val intent = Intent(this, StripeSetupActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
         addWifiFab = findViewById(R.id.fab)
@@ -86,6 +94,14 @@ class MarketBoardActivity : AppCompatActivity() {
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
+    }
+
+    private fun didSellerSetupStripe(): Boolean {
+        val stripeAccountForSeller = ParseQuery.getQuery<StripeAccount>("StripeAccount")
+            .whereEqualTo("seller", ParseUser.getCurrentUser())
+            .whereEqualTo("isSetup", true)
+            .find()
+        return ParseUser.getCurrentUser().userType == "Seller" && !stripeAccountForSeller.isNullOrEmpty()
     }
 
     private fun onSortOptionSelected(checkedId: Int) {

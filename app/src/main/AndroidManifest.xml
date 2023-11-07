@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Wifind"
         tools:targetApi="31">
         <activity
+            android:name=".activity.StripeSetupActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SignUpChooseActivity"
             android:exported="false" />
         <activity
