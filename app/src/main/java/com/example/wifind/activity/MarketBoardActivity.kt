@@ -116,7 +116,10 @@ class MarketBoardActivity : AppCompatActivity() {
                     val ratingBar = view.findViewById<RatingBar>(R.id.rating)
                     val etReview = view.findViewById<EditText>(R.id.et_review)
 
-                    val dialog = MaterialAlertDialogBuilder(this@MarketBoardActivity, ThemeOverlay_Material3_MaterialAlertDialog_Centered)
+                    val dialog = MaterialAlertDialogBuilder(
+                        this@MarketBoardActivity,
+                        ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                    )
                         .setView(view)
                         .setTitle("Add Rating")
                         .setMessage("Rate the service by this Seller")
@@ -129,7 +132,8 @@ class MarketBoardActivity : AppCompatActivity() {
                         }
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
-                    dialog.findViewById<TextView>(android.R.id.message)?.gravity = Gravity.CENTER_HORIZONTAL
+                    dialog.findViewById<TextView>(android.R.id.message)?.gravity =
+                        Gravity.CENTER_HORIZONTAL
                 }
             }
         )
@@ -177,8 +181,16 @@ class MarketBoardActivity : AppCompatActivity() {
         showAddEditWifiDialog(
             title = "Edit Wifi",
             wifi = wifi,
-            onConfirmClicked = { wifi ->
-                wifi.save()
+            onConfirmClicked = { name, password, price, speed, location, seller ->
+                Wifi().apply {
+                    objectId = wifi.objectId
+                    wifiName = name
+                    wifiPassword = password
+                    this.price = price
+                    wifiSpeed = speed
+                    this.location = location
+                    this.seller = seller
+                }.save()
                 refreshRecyclerView()
                 wifiRecyclerView.adapter?.notifyItemChanged(position)
             }
@@ -198,8 +210,15 @@ class MarketBoardActivity : AppCompatActivity() {
     private fun showAddWifiDialog() {
         showAddEditWifiDialog(
             title = "Add Wifi",
-            onConfirmClicked = { wifi ->
-                wifi.save()
+            onConfirmClicked = { name, password, price, speed, location, seller ->
+                Wifi().apply {
+                    wifiName = name
+                    wifiPassword = password
+                    this.price = price
+                    wifiSpeed = speed
+                    this.location = location
+                    this.seller = seller
+                }.save()
                 refreshRecyclerView()
             }
         )
@@ -208,7 +227,7 @@ class MarketBoardActivity : AppCompatActivity() {
     private fun showAddEditWifiDialog(
         title: String,
         wifi: Wifi = Wifi(),
-        onConfirmClicked: (wifi: Wifi) -> Unit,
+        onConfirmClicked: (name: String, password: String, price: Double, speed: Int, location: ParseGeoPoint, seller: ParseUser) -> Unit,
     ) {
         val view = LayoutInflater.from(this).inflate(R.layout.layout_wifi_add_edit, null)
         val etLat = view.findViewById<EditText>(R.id.et_lat)
@@ -233,17 +252,15 @@ class MarketBoardActivity : AppCompatActivity() {
             .setPositiveButton("Confirm") { _, _ ->
                 try {
                     onConfirmClicked(
-                        wifi.apply {
-                            this.wifiName = etName.text.toString()
-                            this.wifiPassword = etPassword.text.toString()
-                            this.price = etPrice.text.toString().toDouble()
-                            wifiSpeed = etSpeed.text.toString().toInt()
-                            location = ParseGeoPoint(
-                                etLat.text.toString().toDouble(),
-                                etLon.text.toString().toDouble()
-                            )
-                            seller = ParseUser.getCurrentUser()
-                        }
+                        etName.text.toString(),
+                        etPassword.text.toString(),
+                        etPrice.text.toString().toDouble(),
+                        etSpeed.text.toString().toInt(),
+                        ParseGeoPoint(
+                            etLat.text.toString().toDouble(),
+                            etLon.text.toString().toDouble()
+                        ),
+                        ParseUser.getCurrentUser()
                     )
                 } catch (e: Exception) {
                     Toast.makeText(
