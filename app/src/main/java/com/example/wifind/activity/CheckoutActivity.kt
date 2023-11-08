@@ -74,7 +74,11 @@ class CheckoutActivity : AppCompatActivity() {
                     .whereEqualTo("objectId", wifi.objectId)
                     .first
                     .wifiPassword
-                setResult(RESULT_OK, Intent().putExtra("wifiPassword", wifiPassword))
+                setResult(RESULT_OK,
+                    Intent()
+                        .putExtra("wifiPassword", wifiPassword)
+                        .putExtra("wifiId", wifi.objectId)
+                )
             }
         }
         finish()

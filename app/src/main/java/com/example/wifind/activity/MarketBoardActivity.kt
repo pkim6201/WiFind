@@ -49,6 +49,7 @@ class MarketBoardActivity : AppCompatActivity() {
     private lateinit var sortRadioGroup: RadioGroup
     private val wifiCards = mutableListOf<WifiCard>()
     lateinit var bottomNav: BottomNavigationView
+    private lateinit var wifiCardAdapter: WifiCardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +86,7 @@ class MarketBoardActivity : AppCompatActivity() {
             showAddWifiDialog()
         }
 
-        wifiRecyclerView.adapter = WifiCardAdapter(
+        wifiCardAdapter = WifiCardAdapter(
             wifiCards = wifiCards,
             object : WifiCardAdapter.OnItemClickListener {
                 override fun onEditClicked(wifiCard: WifiCard, position: Int) {
@@ -137,6 +138,7 @@ class MarketBoardActivity : AppCompatActivity() {
                 }
             }
         )
+        wifiRecyclerView.adapter = wifiCardAdapter
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
 
         refreshRecyclerView()
@@ -149,6 +151,8 @@ class MarketBoardActivity : AppCompatActivity() {
         if (requestCode != CHECKOUT_ACTIVITY_REQUEST_CODE || resultCode != Activity.RESULT_OK) return
 
         val wifiPassword = data?.getStringExtra("wifiPassword") ?: return
+        val wifiId = data.getStringExtra("wifiId") ?: return
+        wifiCardAdapter.addPurchasedWifi(wifiId)
         AlertDialog.Builder(this)
             .setTitle("Wifi Successfully Purchased")
             .setMessage("Wifi Password: $wifiPassword")

@@ -21,11 +21,16 @@ class WifiCardAdapter(
     private val onItemClickListener: OnItemClickListener,
 ) : RecyclerView.Adapter<WifiCardAdapter.ViewHolder>() {
 
-    private var purchasedWifiIds: Set<String> = ParseQuery.getQuery(Transaction::class.java)
-        .whereEqualTo("buyer", ParseUser.getCurrentUser())
-        .find()
-        .map { it.purchasedWifi.objectId }
-        .toSet()
+    private var purchasedWifiIds = mutableSetOf<String>()
+
+    init {
+        purchasedWifiIds.addAll(
+            ParseQuery.getQuery(Transaction::class.java)
+                .whereEqualTo("buyer", ParseUser.getCurrentUser())
+                .find()
+                .map { it.purchasedWifi.objectId }
+        )
+    }
 
     interface OnItemClickListener {
         fun onEditClicked(wifiCard: WifiCard, position: Int)
@@ -94,6 +99,11 @@ class WifiCardAdapter(
                 setOnClickListener { onItemClickListener.onRateClicked(wifiCard) }
             }
         }
+    }
+
+    fun addPurchasedWifi(wifiId: String) {
+        purchasedWifiIds.add(wifiId)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = wifiCards.size
