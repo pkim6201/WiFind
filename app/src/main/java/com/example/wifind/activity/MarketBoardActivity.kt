@@ -97,6 +97,13 @@ class MarketBoardActivity : AppCompatActivity() {
                     startActivityForResult(intent, CHECKOUT_ACTIVITY_REQUEST_CODE)
                 }
 
+                override fun onViewClicked(wifiCard: WifiCard) {
+                    AlertDialog.Builder(this@MarketBoardActivity)
+                        .setTitle("View Wifi Password")
+                        .setMessage("Wifi Password: " + wifiCard.wifi.wifiPassword)
+                        .setNegativeButton("OK") { dialog, _ -> dialog.dismiss() }
+                        .show()
+                }
             }
         )
         wifiRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -212,7 +219,11 @@ class MarketBoardActivity : AppCompatActivity() {
                         }
                     )
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error: '${e.message}' please try again", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error: '${e.message}' please try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { _, _ -> }
