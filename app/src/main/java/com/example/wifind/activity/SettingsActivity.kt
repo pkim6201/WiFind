@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.wifind.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,6 +28,7 @@ class SettingsActivity : AppCompatActivity() {
         btLogOut = findViewById(R.id.bt_logout)
         bottomNav = findViewById(R.id.bottom_nav)
 
+        findViewById<TextView>(R.id.tv_signed_in_as).text = "Signed in as: " + ParseUser.getCurrentUser().username
         btReport.setOnClickListener { onReportClicked() }
         btLogOut.setOnClickListener {
             ParseUser.logOut()
