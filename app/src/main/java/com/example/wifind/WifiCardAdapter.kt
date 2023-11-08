@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wifind.WifiCardAdapter.TrailingButton.BUY
 import com.example.wifind.WifiCardAdapter.TrailingButton.VIEW
@@ -31,6 +32,7 @@ class WifiCardAdapter(
         fun onDeleteClicked(wifiCard: WifiCard, position: Int)
         fun onBuyClicked(wifiCard: WifiCard)
         fun onViewClicked(wifiCard: WifiCard)
+        fun onRateClicked(wifiCard: WifiCard)
     }
 
     enum class TrailingButton(val text: String) {
@@ -46,6 +48,7 @@ class WifiCardAdapter(
         val editButton = itemView.findViewById<ImageView>(R.id.edit_icon)
         val deleteButton = itemView.findViewById<ImageView>(R.id.delete_icon)
         val trailingButton = itemView.findViewById<Button>(R.id.bt_trailing)
+        val rateButton = itemView.findViewById<Button>(R.id.bt_rate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiCardAdapter.ViewHolder {
@@ -85,6 +88,10 @@ class WifiCardAdapter(
                         BUY -> onItemClickListener.onBuyClicked(wifiCard)
                     }
                 }
+            }
+            rateButton.apply {
+                isVisible = userPurchasedWifi
+                setOnClickListener { onItemClickListener.onRateClicked(wifiCard) }
             }
         }
     }

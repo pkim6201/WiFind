@@ -10,9 +10,12 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.RadioGroup
+import android.widget.RatingBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,10 +26,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wifind.R
 import com.example.wifind.RangeInputFilter
 import com.example.wifind.WifiCardAdapter
+import com.example.wifind.model.Review
 import com.example.wifind.model.StripeAccount
 import com.example.wifind.model.Wifi
 import com.example.wifind.model.WifiCard
 import com.example.wifind.model.userType
+import com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -103,6 +108,28 @@ class MarketBoardActivity : AppCompatActivity() {
                         .setMessage("Wifi Password: " + wifiCard.wifi.wifiPassword)
                         .setNegativeButton("OK") { dialog, _ -> dialog.dismiss() }
                         .show()
+                }
+
+                override fun onRateClicked(wifiCard: WifiCard) {
+                    val view = LayoutInflater.from(this@MarketBoardActivity)
+                        .inflate(R.layout.dialog_add_rating, null)
+                    val ratingBar = view.findViewById<RatingBar>(R.id.rating)
+                    val etReview = view.findViewById<EditText>(R.id.et_review)
+
+                    val dialog = MaterialAlertDialogBuilder(this@MarketBoardActivity, ThemeOverlay_Material3_MaterialAlertDialog_Centered)
+                        .setView(view)
+                        .setTitle("Add Rating")
+                        .setMessage("Rate the service by this Seller")
+                        .setPositiveButton("Confirm") { _, _ ->
+                            Review().apply {
+                                userRating = ratingBar.rating.toInt()
+                                userReview = etReview.text.toString()
+                                seller = wifiCard.wifi.seller
+                            }.save()
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .show()
+                    dialog.findViewById<TextView>(android.R.id.message)?.gravity = Gravity.CENTER_HORIZONTAL
                 }
             }
         )
