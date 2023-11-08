@@ -41,7 +41,7 @@ class CheckoutActivity : AppCompatActivity() {
             val json = JSONObject(jsonString)
             val paymentIntentClientSecret = json.getString("paymentIntent")
             val publishableKey = json.getString("publishableKey")
-            PaymentConfiguration.init(this, publishableKey, sellerAccountId)
+            PaymentConfiguration.init(this, publishableKey)
             paymentSheet.presentWithPaymentIntent(
                 paymentIntentClientSecret = paymentIntentClientSecret
             )
