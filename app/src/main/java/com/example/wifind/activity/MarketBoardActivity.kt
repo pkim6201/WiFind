@@ -55,11 +55,7 @@ class MarketBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_market_board)
 
-        if (!didSellerSetupStripe()) {
-            val intent = Intent(this, StripeSetupActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
+        maybeNavigateToStripeSignup()
 
         wifiRecyclerView = findViewById(R.id.recycler_view)
         addWifiFab = findViewById(R.id.fab)
@@ -144,6 +140,17 @@ class MarketBoardActivity : AppCompatActivity() {
         refreshRecyclerView()
     }
 
+    private fun maybeNavigateToStripeSignup() {
+        val user = ParseUser.getCurrentUser()
+        if (user.userType != "Seller") return
+
+        if (!didSellerSetupStripe(user)) {
+            val intent = Intent(this, StripeSetupActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -160,12 +167,12 @@ class MarketBoardActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun didSellerSetupStripe(): Boolean {
+    private fun didSellerSetupStripe(user: ParseUser): Boolean {
         val stripeAccountForSeller = ParseQuery.getQuery<StripeAccount>("StripeAccount")
-            .whereEqualTo("seller", ParseUser.getCurrentUser())
+            .whereEqualTo("seller", user)
             .whereEqualTo("isSetup", true)
             .find()
-        return ParseUser.getCurrentUser().userType == "Seller" && !stripeAccountForSeller.isNullOrEmpty()
+        return !stripeAccountForSeller.isNullOrEmpty()
     }
 
     private fun onSortOptionSelected(checkedId: Int) {
