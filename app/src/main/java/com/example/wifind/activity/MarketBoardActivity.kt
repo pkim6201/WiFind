@@ -23,8 +23,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wifind.MarketboardSortUtil.sortWifisBy
 import com.example.wifind.R
 import com.example.wifind.RangeInputFilter
+import com.example.wifind.SortType
 import com.example.wifind.WifiCardAdapter
 import com.example.wifind.model.Review
 import com.example.wifind.model.StripeAccount
@@ -176,10 +178,12 @@ class MarketBoardActivity : AppCompatActivity() {
     }
 
     private fun onSortOptionSelected(checkedId: Int) {
-        when (checkedId) {
-            R.id.rb_distance -> wifiCards.sortBy { it.distanceToWifi }
-            R.id.rb_price -> wifiCards.sortBy { it.wifi.price }
-        }
+        wifiCards.sortWifisBy(
+            if (checkedId == R.id.rb_distance)
+                SortType.DISTANCE
+            else
+                SortType.PRICE
+        )
         wifiRecyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -297,12 +301,13 @@ class MarketBoardActivity : AppCompatActivity() {
         val wifis = getAllWifis()
         getCurrentLocation(getLocationManager()) { location ->
             runOnUiThread {
-                wifiCards.clear()
-                wifiCards.addAll(
-                    wifis
-                        .map { it.toWifiCard(location) }
-                        .sortedByDescending(WifiCard::distanceToWifi)
-                )
+                wifiCards.apply {
+                    clear()
+                    addAll(
+                        wifis.map { it.toWifiCard(location) }
+                    )
+                    sortWifisBy(SortType.DISTANCE)
+                }
                 wifiRecyclerView.adapter?.notifyDataSetChanged()
                 wifiRecyclerView.smoothScrollToPosition(0)
             }
