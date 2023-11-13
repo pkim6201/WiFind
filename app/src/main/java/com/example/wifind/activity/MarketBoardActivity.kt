@@ -23,7 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wifind.MarketboardSorter.sortWifisBy
+import com.example.wifind.Marketboard
 import com.example.wifind.R
 import com.example.wifind.RangeInputFilter
 import com.example.wifind.SortType
@@ -40,6 +40,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.parse.ParseGeoPoint
 import com.parse.ParseQuery
 import com.parse.ParseUser
+import java.util.Collections.addAll
 
 
 class MarketBoardActivity : AppCompatActivity() {
@@ -49,7 +50,7 @@ class MarketBoardActivity : AppCompatActivity() {
     private lateinit var wifiRecyclerView: RecyclerView
     private lateinit var addWifiFab: FloatingActionButton
     private lateinit var sortRadioGroup: RadioGroup
-    private val wifiCards = mutableListOf<WifiCard>()
+    private val marketboard = Marketboard()
     lateinit var bottomNav: BottomNavigationView
     private lateinit var wifiCardAdapter: WifiCardAdapter
 
@@ -85,7 +86,7 @@ class MarketBoardActivity : AppCompatActivity() {
         }
 
         wifiCardAdapter = WifiCardAdapter(
-            wifiCards = wifiCards,
+            wifiCards = marketboard.wifiCards,
             object : WifiCardAdapter.OnItemClickListener {
                 override fun onEditClicked(wifiCard: WifiCard, position: Int) {
                     onWifiCardEditClicked(wifiCard.wifi, position)
@@ -178,7 +179,7 @@ class MarketBoardActivity : AppCompatActivity() {
     }
 
     private fun onSortOptionSelected(checkedId: Int) {
-        wifiCards.sortWifisBy(
+        marketboard.sortWifisBy(
             if (checkedId == R.id.rb_distance)
                 SortType.DISTANCE
             else
@@ -214,7 +215,7 @@ class MarketBoardActivity : AppCompatActivity() {
 
     fun onWifiCardDeleteClicked(wifiCard: WifiCard, position: Int) {
         wifiCard.wifi.delete()
-        wifiCards.remove(wifiCard)
+        marketboard.wifiCards.remove(wifiCard)
         wifiRecyclerView.adapter?.notifyItemRemoved(position)
     }
 
@@ -301,13 +302,13 @@ class MarketBoardActivity : AppCompatActivity() {
         val wifis = getAllWifis()
         getCurrentLocation(getLocationManager()) { location ->
             runOnUiThread {
-                wifiCards.apply {
+                marketboard.wifiCards.apply {
                     clear()
                     addAll(
                         wifis.map { it.toWifiCard(location) }
                     )
-                    sortWifisBy(SortType.DISTANCE)
                 }
+                marketboard.sortWifisBy(SortType.DISTANCE)
                 wifiRecyclerView.adapter?.notifyDataSetChanged()
                 wifiRecyclerView.smoothScrollToPosition(0)
             }
