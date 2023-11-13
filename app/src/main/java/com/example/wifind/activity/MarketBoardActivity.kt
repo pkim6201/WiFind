@@ -23,7 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wifind.MarketboardSortUtil.sortWifisBy
+import com.example.wifind.MarketboardSorter.sortWifisBy
 import com.example.wifind.R
 import com.example.wifind.RangeInputFilter
 import com.example.wifind.SortType

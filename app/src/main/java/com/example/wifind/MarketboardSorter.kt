@@ -7,7 +7,7 @@ enum class SortType {
     DISTANCE
 }
 
-object MarketboardSortUtil {
+object MarketboardSorter {
     fun MutableList<WifiCard>.sortWifisBy(sortType: SortType) {
         when (sortType) {
             SortType.PRICE -> this.sortBy { it.wifi.price }
